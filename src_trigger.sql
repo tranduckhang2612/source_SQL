@@ -17,19 +17,8 @@ BEGIN
 END;
 
 -- Testcase 
-INSERT INTO NHANVIEN (
-    TenLot
-    , ChuCaiDauGiua
-    , Ten
-    , SoCCCD
-    , NgaySinh
-    , DiaChi
-    , GioiTinh
-    , Luong
-    , SoCCCD_NguoiQL
-    , MaPhong
-    , NgayVaoLam) 
-VALUES ('Nguyen', 'V', 'Em Be', '111222333', '2015-01-01', 'Hồ Chí Minh', 'M', 10000.00, NULL, 2, '2026-01-01');
+-- Cập nhật tuổi của nhân viên đã có (123456789) thành dưới 18 tuổi để kích hoạt lỗi
+UPDATE NHANVIEN SET NgaySinh = GETDATE() WHERE SoCCCD = '123456789';
 
 -- Bài 2
 -- Người quản lý phải lớn tuổi hơn nhân viên dưới quyền
@@ -50,21 +39,8 @@ BEGIN
 END;
 
 -- Testcase
-INSERT INTO NHANVIEN (
-    TenLot
-    , ChuCaiDauGiua
-    , Ten
-    , SoCCCD
-    , NgaySinh
-    , DiaChi
-    , GioiTinh
-    , Luong
-    , SoCCCD_NguoiQL
-    , MaPhong
-    , NgayVaoLam) 
-VALUES (
-    'Tran', 'V', 'Gia', '444555666', '1980-01-01', 'Hồ Chí Minh', 'M', 30000.00, '987654321', 2, '2020-01-01'
-);
+-- Cập nhật nhân viên 456789123 có ngày sinh nhỏ hơn (già hơn) người quản lý 987654321 (sinh năm 1988)
+UPDATE NHANVIEN SET NgaySinh = '1980-01-01' WHERE SoCCCD = '456789123';
 
 -- Bài 3:
 -- Lương nhân viên không được lớn hơn lương người quản lý
@@ -85,9 +61,8 @@ BEGIN
 END;
 
 -- Testcase
-UPDATE NHANVIEN 
-SET Luong = 45000.00 
-WHERE SoCCCD = '456789123';
+-- Cập nhật lương của nhân viên 456789123 (hiện tại 35000) lớn hơn người quản lý 987654321 (lương 40000)
+UPDATE NHANVIEN SET Luong = 45000.00 WHERE SoCCCD = '456789123';
 
 -- Bài 4:
 -- Trưởng phòng của một phòng ban phải là nhân viên của phòng ban đó
@@ -108,9 +83,8 @@ BEGIN
 END;
 
 -- Testcase 
-UPDATE PHONGBAN 
-SET SoCCCD_TruongPhong = '789123456' 
-WHERE MaPhong = 4;
+-- Gán nhân viên 789123456 (đang thuộc phòng 3) làm trưởng phòng của phòng 4
+UPDATE PHONGBAN SET SoCCCD_TruongPhong = '789123456' WHERE MaPhong = 4;
 
 -- Bài 5:
 -- Địa điểm của dự án phải trùng với một trong các địa điểm của phòng ban phụ trách dự án đó
@@ -133,8 +107,8 @@ BEGIN
 END;
 
 -- Testcase 
-INSERT INTO DUAN (TenDuAn, SoDuAn, DiaDiemDuAn, MaPhong) 
-VALUES ('Project_Loi', 99, 'Vung Tau', 3);
+-- Cập nhật địa điểm của dự án 10 thành địa điểm không thuộc phòng ban 2 quản lý
+UPDATE DUAN SET DiaDiemDuAn = 'Vung Tau' WHERE SoDuAn = 10;
 
 -- Bài 6: 
 -- Ngày vào làm của nhân viên phải lớn hơn ngày sinh
@@ -154,21 +128,8 @@ BEGIN
 END;
 
 -- Testcase: 
-INSERT INTO NHANVIEN (
-    TenLot
-    , ChuCaiDauGiua
-    , Ten
-    , SoCCCD
-    , NgaySinh
-    , DiaChi
-    , GioiTinh
-    , Luong
-    , SoCCCD_NguoiQL
-    , MaPhong
-    , NgayVaoLam) 
-VALUES (
-    'Le', 'V', 'Loi', '999888777', '2000-01-01', 'Hà Nội', 'M', 20000.00, NULL, 2, '1999-01-01'
-);
+-- Cập nhật ngày vào làm của nhân viên 123456789 trước ngày sinh của họ (1985-01-15)
+UPDATE NHANVIEN SET NgayVaoLam = '1980-01-01' WHERE SoCCCD = '123456789';
 
 -- Bài 7: 
 -- Người quản lý phải được thuê trước nhân viên cấp dưới ít nhất 1 năm 
@@ -189,21 +150,8 @@ BEGIN
 END;
 
 -- Testcase
-INSERT INTO NHANVIEN (
-    TenLot
-    , ChuCaiDauGiua
-    , Ten
-    , SoCCCD
-    , NgaySinh
-    , DiaChi
-    , GioiTinh
-    , Luong
-    , SoCCCD_NguoiQL
-    , MaPhong
-    , NgayVaoLam) 
-VALUES (
-    'Ngo', 'V', 'Kiet', '555666777', '1995-01-01', 'Đà Nẵng', 'M', 25000.00, '987654321', 2, '2015-06-01'
-);
+-- Cập nhật ngày vào làm của 456789123 thành 2015-06-01, trong khi quản lý 987654321 vào làm 2015-03-12 (nhỏ hơn 1 năm)
+UPDATE NHANVIEN SET NgayVaoLam = '2015-06-01' WHERE SoCCCD = '456789123';
 
 -- Bài 8:
 -- Thuộc tính PHONGBAN.SoLuongNhanVien là thuộc tính suy diễn từ NHANVIEN.MaPhong.
@@ -224,17 +172,11 @@ BEGIN
 END;
 
 -- Testcase
-INSERT INTO NHANVIEN (
-    TenLot
-    , ChuCaiDauGiua
-    , Ten
-    , SoCCCD
-    , MaPhong
-) 
-VALUES ('A', 'B', 'C', '123456789', 1);
-SELECT SoLuongNhanVien 
-FROM PHONGBAN 
-WHERE MaPhong = 1;
+-- Thử đổi phòng ban của nhân viên đã có sẵn (123456789) để kích hoạt trigger
+UPDATE NHANVIEN SET MaPhong = 2 WHERE SoCCCD = '123456789';
+
+SELECT MaPhong, SoLuongNhanVien 
+FROM PHONGBAN;
 
 
 -- Bài 9:
@@ -257,12 +199,12 @@ BEGIN
 END;
 
 -- Testcase
-INSERT INTO THAM_GIA(
-    SoCCCD_NV
-    , SoDuAn
-    , SoGio
-) 
-VALUES ('123456789', 1, 10);
+-- Nhân viên 123456789 đã tham gia 1 dự án (40) trong insertTable. 
+-- Thêm vào 4 dự án nữa để kích hoạt lỗi làm quá 4 dự án.
+INSERT INTO THAM_GIA(SoCCCD_NV, SoDuAn, SoGio) VALUES ('123456789', 10, 5);
+INSERT INTO THAM_GIA(SoCCCD_NV, SoDuAn, SoGio) VALUES ('123456789', 20, 5);
+INSERT INTO THAM_GIA(SoCCCD_NV, SoDuAn, SoGio) VALUES ('123456789', 30, 5);
+INSERT INTO THAM_GIA(SoCCCD_NV, SoDuAn, SoGio) VALUES ('123456789', 50, 5);
 
 
 -- Bài 10:
@@ -285,12 +227,8 @@ BEGIN
 END;
 
 -- Testcase
-INSERT INTO THAM_GIA(
-    SoCCCD_NV
-    , SoDuAn
-    , SoGio
-) 
-VALUES ('123456789', 2, 20);
+-- Nhân viên 123456789 đã có 15.5h. Thêm 40h nữa -> Tổng > 50h, kích hoạt lỗi.
+INSERT INTO THAM_GIA(SoCCCD_NV, SoDuAn, SoGio) VALUES ('123456789', 10, 40);
 
 
 -- Bài 11:
@@ -313,15 +251,10 @@ BEGIN
 END;
 
 -- Testcase
-INSERT INTO THAM_GIA(
-    SoCCCD_NV
-    , SoDuAn
-    , SoGio
-) 
-VALUES 
-    ('111', 1, 5)
-    ,('222', 1, 5)
-    ,('333', 1, 5);
+-- Thêm 3 nhân viên có sẵn làm việc dưới 10h cho cùng 1 dự án (20)
+INSERT INTO THAM_GIA(SoCCCD_NV, SoDuAn, SoGio) VALUES ('123456789', 20, 5);
+INSERT INTO THAM_GIA(SoCCCD_NV, SoDuAn, SoGio) VALUES ('987654321', 20, 5);
+INSERT INTO THAM_GIA(SoCCCD_NV, SoDuAn, SoGio) VALUES ('456789123', 20, 5);
 
 
 -- Bài 12:
@@ -344,12 +277,8 @@ BEGIN
 END;
 
 -- Testcase
-INSERT INTO THAM_GIA(
-    SoCCCD_NV
-    , SoDuAn
-    , SoGio
-) 
-VALUES ('NV_KHONG_PHAI_TP', 1, 4); 
+-- Nhân viên 456789123 không phải trưởng phòng, chèn thời gian < 5h để kích hoạt lỗi
+INSERT INTO THAM_GIA(SoCCCD_NV, SoDuAn, SoGio) VALUES ('456789123', 20, 4);
 
 
 -- Bài 13:
@@ -372,12 +301,8 @@ BEGIN
 END;
 
 -- Testcase
-INSERT INTO THAM_GIA(
-    SoCCCD_NV
-    , SoDuAn
-    , SoGio
-) 
-VALUES ('NV_THUONG', 1, 9); 
+-- Nhân viên 456789123 không quản lý ai, làm việc < 10h để kích hoạt lỗi
+INSERT INTO THAM_GIA(SoCCCD_NV, SoDuAn, SoGio) VALUES ('456789123', 20, 9);
 
 
 -- Bài 14:
@@ -413,12 +338,8 @@ BEGIN
 END;
 
 -- Testcase
-INSERT INTO THAM_GIA(
-    SoCCCD_NV
-    , SoDuAn
-    , SoGio
-) 
-VALUES ('TRUONG_PHONG', 1, 4);
+-- Trưởng phòng 987654321 (phòng 2) làm việc < 5h cho dự án do phòng mình kiểm soát (Dự án 20)
+INSERT INTO THAM_GIA(SoCCCD_NV, SoDuAn, SoGio) VALUES ('987654321', 20, 4);
 
 
 -- Bài 15:
@@ -461,9 +382,8 @@ BEGIN
 END;
 
 -- Testcase
-UPDATE NHANVIEN 
-SET MaPhong = 2 
-WHERE SoCCCD = 'NV001';
+-- Chuyển nhân viên 456789123 sang phòng 3 để cập nhật người quản lý mới tự động
+UPDATE NHANVIEN SET MaPhong = 3 WHERE SoCCCD = '456789123';
 
 
 -- Bài 16:
@@ -497,10 +417,8 @@ BEGIN
 END;
 
 -- Testcase
+-- Nhân viên 987654321 đang được quản lý bởi 123456789 (theo insertTable).
+-- Cập nhật để 123456789 bị quản lý bởi 987654321 (tạo vòng lặp) để kích hoạt lỗi.
 UPDATE NHANVIEN 
-SET SoCCCD_NguoiQL = 'A'
-WHERE SoCCCD = 'B';
-
-UPDATE NHANVIEN 
-SET SoCCCD_NguoiQL = 'B'
-WHERE SoCCCD = 'A';
+SET SoCCCD_NguoiQL = '987654321'
+WHERE SoCCCD = '123456789';
